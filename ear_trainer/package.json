@@ -1,0 +1,15 @@
+{
+  "name": "ear_trainer",
+  "version": "1.0.0",
+  "description": "An Amazon Alexa Skill that plays any musical interval to practise your ear training.",
+  "repository": { 
+    "type" : "git",
+    "url" : "https://github.com/efung/AlexaEarTrainer"
+  },
+  "main": "index.js",
+  "author": "Eric Fung <efung@acm.org>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "alexa-app": "^2.1.0"
+  }
+}
