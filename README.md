@@ -6,11 +6,28 @@ that helps music students work on their [ear
 training](https://en.wikipedia.org/wiki/Ear_training), specifically,
 interval recognition.
 
-Currently, you can say the following utterances:
+Currently, you can say utterances like:
+
+- Alexa, ask Ear Trainer to play a major third
+- Alexa, ask Ear Trainer to play a perfect fifth descending
+- Alexa, ask Ear Trainer to play a minor seventh ascending
+- 
+## Supported Intervals
+- Perfect unison
+- Major/Minor second
+- Major/Minor third
+- Perfect fourth
+- Augmented fourth/diminished fifth
+- Major/Minor sixth
+- Major/Minor seventh
+- Perfect octave
 
 # Usage
 This skill is published, so open the Alexa companion app and add it to
 your Amazon Echo product.
+
+# Future Plans
+- Quiz mode: ask skill to play an interval and you can guess it
 
 # Building
 
@@ -35,6 +52,6 @@ them into the correct MP3 format.
 the files public.
 - To bundle the Alexa skill and upload it as a Lambda function, run `npm
 install` from the `ear_trainer` folder. Then archive the `index.js` file and
-`node_modules` folders into a zip.
+`node_modules` folders into a zip. Note that I've used the [alexa-app](https://github.com/matt-kruse/alexa-app) framework, which has a few dependencies.
 
 
