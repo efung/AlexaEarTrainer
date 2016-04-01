@@ -11,7 +11,7 @@ Currently, you can say utterances like:
 - Alexa, ask Ear Trainer to play a major third
 - Alexa, ask Ear Trainer to play a perfect fifth descending
 - Alexa, ask Ear Trainer to play a minor seventh ascending
-- 
+
 ## Supported Intervals
 - Perfect unison
 - Major/Minor second
