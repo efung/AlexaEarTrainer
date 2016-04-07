@@ -23,8 +23,7 @@ Currently, you can say utterances like:
 - Perfect octave
 
 # Usage
-This skill is published, so open the Alexa companion app and add it to
-your Amazon Echo product.
+This skill is pending publication. It will hopefully be available mid-April 2016.
 
 # Future Plans
 - Quiz mode: ask skill to play an interval and you can guess it
