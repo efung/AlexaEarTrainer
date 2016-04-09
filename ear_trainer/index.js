@@ -66,6 +66,14 @@ function beginsWithVowel(str) {
     return (/^[aeiou]/i).test(str);
 }
 
+function prefixStringWithAOrAn(word) {
+    return beginsWithVowel(word) ? ("an " + word) : ("a " + word);
+}
+
+function removeAOrAnPrefix(phrase) {
+    return phrase.replace(/^an? /, "");
+}
+
 function get_note_from_interval(interval, direction) {
   semitone_interval = INTERVAL_DISTANCES[interval] * ((direction === "ascending") ? 1 : -1);
   for (var note in NOTE_OFFSETS) {
@@ -75,6 +83,7 @@ function get_note_from_interval(interval, direction) {
   }
 }
 
+app.exhaustiveUtterances = true;
 app.dictionary = {"directions": ["", "ascending", "descending"]};
 
 app.launch(function(req,res) {
@@ -84,21 +93,22 @@ app.launch(function(req,res) {
 app.intent('PlayIntervalIntent', {
 		"slots":{"INTERVAL":"LITERAL", "DIRECTION":"LITERAL"}
 		,"utterances":[
-        "play a {" +
-        Object.keys(ALL_INTERVALS).join('|') +
+        "play {" +
+        Object.keys(ALL_INTERVALS).map(prefixStringWithAOrAn).join('|') +
         "|INTERVAL} " +
         "{ascending|descending|DIRECTION}"]
 	},function(req,res) {
-    if ( req.slot('INTERVAL') in ALL_INTERVALS ) {
+    interval = removeAOrAnPrefix(req.slot('INTERVAL'));
+    if ( interval in ALL_INTERVALS ) {
        direction = "ascending";
        if ( !isEmpty(req.slot('DIRECTION')) ) {
          direction = req.slot('DIRECTION');
        }
 
        first_note = get_note_ssml("C4");
-       second_note = get_note_ssml(get_note_from_interval(req.slot('INTERVAL'), direction));
-       res.say('Here is ' + (beginsWithVowel(req.slot('INTERVAL')) ? 'an ' : 'a ') +
-               req.slot('INTERVAL') + ' ' + direction + ' <break/> ' +
+       second_note = get_note_ssml(get_note_from_interval(interval, direction));
+       res.say('Here is ' + prefixStringWithAOrAn(interval) +
+               ' ' + direction + ' <break/> ' +
                first_note + ' ' + second_note);
        res.shouldEndSession(true);
     } else {
