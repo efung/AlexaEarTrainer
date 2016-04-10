@@ -88,7 +88,9 @@ app.dictionary = {"directions": ["", "ascending", "descending"]};
 
 app.launch(function(req,res) {
 	res.say("Welcome to Ear Trainer. " +
-          "You can ask me to play any interval in the octave by saying, Play a perfect fourth, or, Play a minor seventh descending.");
+          "You can ask me to play any interval in the octave, ascending or descending. Which interval should I play?");
+  res.reprompt("I didn\'t understand that. Here are some things you can say: play a minor seventh ascending, or, play an augmented fourth.");
+  res.shouldEndSession(false);
 });
 app.intent('PlayIntervalIntent', {
 		"slots":{"INTERVAL":"LITERAL", "DIRECTION":"LITERAL"}
@@ -112,8 +114,8 @@ app.intent('PlayIntervalIntent', {
                first_note + ' ' + second_note);
        res.shouldEndSession(true);
     } else {
-		  res.say('I didn\'t understand what you said. Try again.');
-      res.shouldEndSession(true);
+      res.reprompt("I didn\'t understand that. Here are some things you can say: play a minor seventh ascending, or, play an augmented fourth.");
+      res.shouldEndSession(false);
     }
 	}
 );
