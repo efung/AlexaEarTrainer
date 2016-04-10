@@ -84,21 +84,20 @@ function get_note_from_interval(interval, direction) {
 }
 
 app.exhaustiveUtterances = true;
-app.dictionary = {"directions": ["", "ascending", "descending"]};
+app.dictionary = {"directions": ["ascending", "descending"]};
 
+var prompt = "Here are some things you can say. Play a minor seventh, or, play an augmented fourth descending."
 app.launch(function(req,res) {
 	res.say("Welcome to Ear Trainer. " +
           "You can ask me to play any interval in the octave, ascending or descending. Which interval should I play?");
-  res.reprompt("I didn\'t understand that. Here are some things you can say: play a minor seventh ascending, or, play an augmented fourth.");
-  res.shouldEndSession(false);
+  res.shouldEndSession(false, prompt);
 });
 app.intent('PlayIntervalIntent', {
 		"slots":{"INTERVAL":"LITERAL", "DIRECTION":"LITERAL"}
 		,"utterances":[
-        "play {" +
-        Object.keys(ALL_INTERVALS).map(prefixStringWithAOrAn).join('|') +
-        "|INTERVAL} " +
-        "{ascending|descending|DIRECTION}"]
+        "play {" + Object.keys(ALL_INTERVALS).map(prefixStringWithAOrAn).join('|') + "|INTERVAL} " + "{ascending|descending|DIRECTION}",
+        "play {" + Object.keys(ALL_INTERVALS).map(prefixStringWithAOrAn).join('|') + "|INTERVAL} " 
+    ]
 	},function(req,res) {
     interval = removeAOrAnPrefix(req.slot('INTERVAL'));
     if ( interval in ALL_INTERVALS ) {
@@ -106,17 +105,18 @@ app.intent('PlayIntervalIntent', {
        if ( !isEmpty(req.slot('DIRECTION')) ) {
          direction = req.slot('DIRECTION');
        }
-
-       first_note = get_note_ssml("C4");
-       second_note = get_note_ssml(get_note_from_interval(interval, direction));
-       res.say('Here is ' + prefixStringWithAOrAn(interval) +
-               ' ' + direction + ' <break/> ' +
-               first_note + ' ' + second_note);
-       res.shouldEndSession(true);
-    } else {
-      res.reprompt("I didn\'t understand that. Here are some things you can say: play a minor seventh ascending, or, play an augmented fourth.");
-      res.shouldEndSession(false);
+       if ( app.dictionary.directions.indexOf(direction) > -1 ) {
+         first_note = get_note_ssml("C4");
+         second_note = get_note_ssml(get_note_from_interval(interval, direction));
+         res.say('Here is ' + prefixStringWithAOrAn(interval) +
+                 ' ' + direction + ' <break/> ' +
+                 first_note + ' ' + second_note);
+         res.shouldEndSession(true);
+         return;
+       }
     }
+
+    res.shouldEndSession(false, "I didn\'t understand that. " + prompt);
 	}
 );
 
