@@ -83,15 +83,56 @@ function get_note_from_interval(interval, direction) {
   }
 }
 
+function getAllIntervalsText() {
+    var intervalsSorted = Object.keys(ALL_INTERVALS).sort(function(a,b){return ALL_INTERVALS[a]-ALL_INTERVALS[b]})
+    var intervalList = '';
+
+    for (var i = 0; i < intervalsSorted.length; i++) {
+        if (i < intervalsSorted.length-1) {
+            intervalList += intervalsSorted[i] + ", ";
+        } else {
+            intervalList += " or " + intervalsSorted[i] + ". ";
+        }
+    }
+
+    return intervalList;
+}
+
 app.exhaustiveUtterances = true;
 app.dictionary = {"directions": ["ascending", "descending"]};
 
-var prompt = "Here are some things you can say. Play a minor seventh, or, play an augmented fourth descending."
+var play_interval_reprompt = "What interval should I play? "
+var example = "Here are some things you can say. Play a minor seventh, or, play a perfect fifth descending. "
+var basic_help = "You can ask me to play any melodic interval between unison and an octave, ascending or descending. ";
 app.launch(function(req,res) {
-	res.say("Welcome to Ear Trainer. " +
-          "You can ask me to play any interval in the octave, ascending or descending. Which interval should I play?");
-  res.shouldEndSession(false, prompt);
+	res.say("Welcome to Ear Trainer. " + play_interval_reprompt);
+  res.shouldEndSession(false, basic_help + play_interval_reprompt);
 });
+
+app.intent('AMAZON.HelpIntent', function(req,res) {
+  // Help navigate core functionality, what skill can do, not what they need to say
+  // Ends with a question prompting
+  res.say(basic_help + play_interval_reprompt + " Or, you can say exit.");
+  res.shouldEndSession(false, play_interval_reprompt);
+  }
+);
+
+app.intent('AMAZON.StopIntent', {
+    "slots": {},
+  },function(req,res) {
+    res.say("Goodbye.");
+    res.shouldEndSession(true);
+  }
+);
+
+app.intent('AMAZON.CancelIntent', {
+    "slots": {},
+  },function(req,res) {
+    res.say("Goodbye.");
+    res.shouldEndSession(true);
+  }
+);
+
 app.intent('PlayIntervalIntent', {
 		"slots":{"INTERVAL":"LITERAL", "DIRECTION":"LITERAL"}
 		,"utterances":[
@@ -113,10 +154,18 @@ app.intent('PlayIntervalIntent', {
                  first_note + ' ' + second_note);
          res.shouldEndSession(true);
          return;
+       } else {
+         res.say('I didn\'t recognize the direction of the interval. ' +
+                 'You can ask me to play the interval ascending or descending. ' + 
+                 play_interval_reprompt);
+         res.shouldEndSession(false, play_interval_reprompt);
        }
+    } else {
+       res.say('I didn\'t recognize the name of that interval. You can ask me to play one of ' +
+               getAllIntervalsText() + play_interval_reprompt);
+       res.shouldEndSession(false, play_interval_reprompt);
     }
 
-    res.shouldEndSession(false, "I didn\'t understand that. " + prompt);
 	}
 );
 
