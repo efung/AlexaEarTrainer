@@ -6,6 +6,9 @@
     "type" : "git",
     "url" : "https://github.com/efung/AlexaEarTrainer"
   },
+  "alexa": {
+    "applicationId": "amzn1.echo-sdk-ams.app.48e185d8-78f2-4abe-8d3c-2aff2606d40f"
+  },
   "main": "index.js",
   "author": "Eric Fung <efung@acm.org>",
   "license": "Apache-2.0",

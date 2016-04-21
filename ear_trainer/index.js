@@ -109,6 +109,13 @@ app.launch(function(req,res) {
   res.shouldEndSession(false, basic_help + play_interval_reprompt);
 });
 
+app.pre = function(request,response,type) {
+    if (request.sessionDetails.application.applicationId != "amzn1.echo-sdk-ams.app.48e185d8-78f2-4abe-8d3c-2aff2606d40f") {
+      // Fail ungracefully
+      response.fail("Invalid applicationId");
+    }
+};
+
 app.intent('AMAZON.HelpIntent', function(req,res) {
   // Help navigate core functionality, what skill can do, not what they need to say
   // Ends with a question prompting
