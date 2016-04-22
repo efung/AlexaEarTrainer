@@ -23,9 +23,10 @@ Currently, you can say utterances like:
 - Perfect octave
 
 # Usage
-This skill is pending publication. It will hopefully be available mid-April 2016.
+This skill was published on 2016-04-22. Add **Ear Trainer** to your Echo device using the Alexa companion app.
 
 # Future Plans
+- Play interval beginning from a specified note
 - Quiz mode: ask skill to play an interval and you can guess it
 
 # Building
